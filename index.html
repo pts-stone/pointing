@@ -3,16 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Pointing</title>
-    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+    <!-- Styles -->
+    <style>
+    #chartdiv {
+      width: 100%;
+      height: 500px;
+    }
+    </style>
+
+    <!-- Resources -->
+    <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+    <script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src="js/countriesToLatLong.js"></script>
     <script src="bower_components/lodash/dist/lodash.js"></script>
     <script src="bower_components/PubSubJS/src/pubsub.js"></script>
-    <script src='https://www.gstatic.com/charts/loader.js'></script>
 </head>
 <body>
-<div id="map" style="width: 100%; height: 400px"></div>
 
-<script src="resources/orders.js"></script>
-<script src="js/maps/google_charts.js"></script>
-<script src="js/main.js"></script>
+<!--<script src="js/main.js"></script>-->
+<script src="js/amcharts.js"></script>
+
+
+<div id="chartdiv"></div>
+<!--<script src="js/main.js"></script>-->
 </body>
 </html>
