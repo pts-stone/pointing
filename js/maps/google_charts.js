@@ -124,7 +124,7 @@ class GoogleChartsMap {
     AmCharts.clear();
 
     var images = _.map(this.convert_data(), (bubble) => {
-      var size =  Math.log(bubble.points)*2;
+      var size =  Math.log(bubble.points)*1.5;
 
       return {
         "type": "circle",
