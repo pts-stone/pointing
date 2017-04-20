@@ -5,6 +5,12 @@ var bubbles = [
 ];
 
 
+var lpsToColour = {
+  'rapid-rewards': '#a7a737',
+  'mileage-plan': '#0A1652'
+};
+
+
 function addBubble(latitude, longitude, lpName, points, cost, timestamp) {
 
 }
@@ -23,11 +29,10 @@ function draw() {
       "theme": "light",
       "width": size,
       "height": size,
-      "color": "#a7a737",
+      "color": lpsToColour[bubble.lpName],
       "longitude": bubble.longitude,
       "latitude": bubble.latitude,
-      "value": "1000000",
-      "label": bubble.lpName
+      "value": "1000000"
     });
   }
 
