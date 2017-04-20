@@ -9,7 +9,7 @@ const POINTING = 'Pointing';
 
 // create a function to subscribe to topics
 const subscriber = function ( msg, data ){
-    document.getElementById("map").innerHTML = data;
+    // document.getElementById("map").innerHTML = data;
 };
 
 // add the function to the list of subscribers for a particular topic
@@ -28,6 +28,8 @@ function connect(){
 
     new GoogleChartsMap("map")
 }
+
+new GoogleChartsMap("map")
 
 //trigger the update per 0.5 second
 setInterval(update, 500);
