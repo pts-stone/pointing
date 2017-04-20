@@ -1,7 +1,10 @@
+function getColorForLP(lp_name) {
+  return "aliceblue"
+}
+
 /**
  * Created by stone.chao on 20/04/17.
  */
-
 const POINTING = 'Pointing';
 
 // create a function to subscribe to topics
@@ -18,6 +21,12 @@ var token = PubSub.subscribe( POINTING, subscriber );
 function update(){
     const milliseconds = new Date().getTime();
     PubSub.publishSync( POINTING, 'hello world! Now is '+ milliseconds );
+}
+
+function connect(){
+    document.getElementById("map").innerHTML = "hello word!";
+
+    new GoogleChartsMap("map")
 }
 
 //trigger the update per 0.5 second
