@@ -96,7 +96,7 @@ class GoogleChartsMap {
           result_for_location[lp_name] = {
             latitude: lat,
             longitude: long,
-            lpName: null,
+            lpName: lp_name,
             points: result_for_lp.points + points,
             cost: result_for_lp.cost + cost
           }
