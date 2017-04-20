@@ -1,3 +1,8 @@
+var lpsToColour = {
+  'rapid-rewards': '#a7a737',
+  'mileage-plan': '#0A1652'
+};
+
 class GoogleChartsMap {
   constructor(elem_id) {
     this.elem_id = elem_id
@@ -9,16 +14,13 @@ class GoogleChartsMap {
     this.interval_instance = setInterval(interval, 1000)
 
     var now = Date.now()
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "globalrewards", points: 100000, cost: 100, timestamp: now})
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "globalrewards", points: 100000, cost: 100, timestamp: now})
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "globalrewards", points: 100000, cost: 100, timestamp: now})
-    this.add({latitude:54, "longitude":-100, lp_name: "globalrewards", points: 50000, cost: 100, timestamp: now})
-
-    //console.log(this.convert_data())
-  }
-
-  getColorForLP(lp_name) {
-    return "aliceblue"
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+2000})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+3000})
+    this.add({latitude:54, "longitude":-100, lp_name: "mileage-plan", points: 50000, cost: 100, timestamp: now+5000})
+    this.add({latitude:54, "longitude":-100, lp_name: "mileage-plan", points: 50000, cost: 100, timestamp: now+6000})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+7000})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+7000})
   }
 
   add({latitude, longitude, address, lp_name, points, cost, timestamp}) {
@@ -44,7 +46,6 @@ class GoogleChartsMap {
       var long = data_point.longitude
       var points = data_point.points
       var cost = data_point.cost
-      var color = this.getColorForLP(lp_name)
       var for_lp = result[lp_name] = result[lp_name] || {
         latitude: lat,
         longitude: long,
@@ -52,11 +53,12 @@ class GoogleChartsMap {
         points: 0,
         cost: 0
       }
+      points = for_lp.points + points
       result[lp_name] = {
         latitude: lat,
         longitude: long,
         lpName: lp_name,
-        points: points,
+        points: for_lp.points + points,
         cost: for_lp.cost + cost
       }
       return result
@@ -65,9 +67,46 @@ class GoogleChartsMap {
   }
 
   convert_data() {
-    var data = _.flatMap(this.data_map, (for_timestamp) => {
-      return _.flatMap(for_timestamp, (for_location) => {
-        return this.reduce_for_location_data(for_location)
+    var now = Date.now()
+    var no_timestamp_data_map = {}
+    for (var timestamp in this.data_map) {
+      if (now - timestamp < 0) {
+        continue
+      }
+
+      var for_timestamp = this.data_map[timestamp]
+      for (var location in for_timestamp) {
+        var for_location = for_timestamp[location]
+        for (var i=0; i<for_location.length; i++) {
+          var data_point = for_location[i]
+          var lp_name = data_point.lpName
+          var lat = data_point.latitude
+          var long = data_point.longitude
+          var points = data_point.points
+          var cost = data_point.cost
+          var result_for_location = no_timestamp_data_map[location] = no_timestamp_data_map[location] || {}
+          var result_for_lp = result_for_location[lp_name] = result_for_location[lp_name] || {
+            latitude: lat,
+            longitude: long,
+            lpName: lp_name,
+            points: 0,
+            cost: 0
+          }
+          points = result_for_lp.points + points
+          result_for_location[lp_name] = {
+            latitude: lat,
+            longitude: long,
+            lpName: lp_name,
+            points: result_for_lp.points + points,
+            cost: result_for_lp.cost + cost
+          }
+        }
+      }
+    }
+
+    var data = _.flatMap(no_timestamp_data_map, (for_location) => {
+      return _.map(for_location, (for_lp) => {
+        return for_lp
       })
     })
     // data.unshift(["location", "color", "cost"])
@@ -92,7 +131,7 @@ class GoogleChartsMap {
         "theme": "light",
         "width": size,
         "height": size,
-        "color": "#a7a737",
+        "color": lpsToColour[bubble.lpName],
         "longitude": bubble.longitude,
         "latitude": bubble.latitude,
         "value": bubble.cost,
@@ -113,7 +152,15 @@ class GoogleChartsMap {
     } );
   }
 
+  removeOldData() {
+    var now = Date.now()
+    this.data_map = _.pickBy(this.data_map, (for_timestamp, timestamp) => {
+      return now - timestamp < 3000
+    })
+  }
+
   interval() {
+    this.removeOldData()
     this.draw()
   }
 }
