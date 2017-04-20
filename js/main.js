@@ -1,15 +1,12 @@
-function getColorForLP(lp_name) {
-  return "aliceblue"
-}
-
 /**
  * Created by stone.chao on 20/04/17.
  */
 const POINTING = 'Pointing';
+const chart = new GoogleChartsMap("map");
 
 // create a function to subscribe to topics
 const subscriber = function ( msg, data ){
-    // document.getElementById("map").innerHTML = data;
+    chart.add(data);
 };
 
 // add the function to the list of subscribers for a particular topic
@@ -20,16 +17,8 @@ var token = PubSub.subscribe( POINTING, subscriber );
 // publish a topic syncronously
 function update(){
     const milliseconds = new Date().getTime();
-    PubSub.publishSync( POINTING, 'hello world! Now is '+ milliseconds );
+    PubSub.publishSync( POINTING, {address: "19 Great Oak Dr", lp_name: "globalrewards", points: 100, cost: 100, timestamp: now} );
 }
-
-function connect(){
-    document.getElementById("map").innerHTML = "hello word!";
-
-    new GoogleChartsMap("map")
-}
-
-new GoogleChartsMap("map")
 
 //trigger the update per 0.5 second
 setInterval(update, 500);

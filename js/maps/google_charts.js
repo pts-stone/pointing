@@ -19,6 +19,10 @@ class GoogleChartsMap {
     console.log(this.convert_data())
   }
 
+  getColorForLP(lp_name) {
+    return "aliceblue"
+  }
+
   add({lat, log, address, lp_name, points, cost, timestamp}) {
     var for_timestamp = this.data_map[timestamp] = this.data_map[timestamp] || {}
     var for_location = for_timestamp[address] = for_timestamp[address] || []
@@ -31,7 +35,7 @@ class GoogleChartsMap {
       var lp_name = data_point[1]
       // var points = data_point[2]
       var cost = data_point[3]
-      var color = getColorForLP(lp_name)
+      var color = this.getColorForLP(lp_name)
       var for_lp = result[lp_name] = result[lp_name] || [location, color, 0]
       result[lp_name] = [location, color, cost+for_lp[2]]
       return result
