@@ -9,11 +9,10 @@ class GoogleChartsMap {
     this.interval_instance = setInterval(interval, 1000)
 
     var now = Date.now()
-    this.add({address: "19 Great Oak Dr", lp_name: "globalrewards", points: 100, cost: 100, timestamp: now})
-    this.add({address: "19 Great Oak Dr", lp_name: "globalrewards", points: 100, cost: 100, timestamp: now})
-    this.add({address: "19 Great Oak Dr", lp_name: "globalrewards", points: 100, cost: 100, timestamp: now})
-    this.add({address: "Vancouver", lp_name: "united", points: 100, cost: 100, timestamp: now})
-    this.add({address: "Montreal", lp_name: "hilton", points: 100, cost: 100, timestamp: now})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "globalrewards", points: 100000, cost: 100, timestamp: now})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "globalrewards", points: 100000, cost: 100, timestamp: now})
+    this.add({latitude:42.5, "longitude":1.5, lp_name: "globalrewards", points: 100000, cost: 100, timestamp: now})
+    this.add({latitude:54, "longitude":-100, lp_name: "globalrewards", points: 50000, cost: 100, timestamp: now})
 
     //console.log(this.convert_data())
   }
@@ -22,21 +21,44 @@ class GoogleChartsMap {
     return "aliceblue"
   }
 
-  add({lat, log, address, lp_name, points, cost, timestamp}) {
+  add({latitude, longitude, address, lp_name, points, cost, timestamp}) {
+    if (!latitude || !longitude) {
+      throw new Error("No latitude or longitude")
+    }
+    address = address || latitude+"X"+longitude
     var for_timestamp = this.data_map[timestamp] = this.data_map[timestamp] || {}
     var for_location = for_timestamp[address] = for_timestamp[address] || []
-    for_location.push([address, lp_name, points, cost])
+    for_location.push({
+      latitude: latitude,
+      longitude: longitude,
+      lpName: lp_name,
+      points: points,
+      cost: cost
+    })
   }
 
   reduce_for_location_data(for_location) {
     var lp_map = _.reduce(for_location, (result, data_point) => {
-      var location = data_point[0]
-      var lp_name = data_point[1]
-      // var points = data_point[2]
-      var cost = data_point[3]
+      var lp_name = data_point.lpName
+      var lat = data_point.latitude
+      var long = data_point.longitude
+      var points = data_point.points
+      var cost = data_point.cost
       var color = this.getColorForLP(lp_name)
-      var for_lp = result[lp_name] = result[lp_name] || [location, color, 0]
-      result[lp_name] = [location, color, cost+for_lp[2]]
+      var for_lp = result[lp_name] = result[lp_name] || {
+        latitude: lat,
+        longitude: long,
+        lpName: lp_name,
+        points: 0,
+        cost: 0
+      }
+      result[lp_name] = {
+        latitude: lat,
+        longitude: long,
+        lpName: lp_name,
+        points: points,
+        cost: for_lp.cost + cost
+      }
       return result
     }, {})
     return _.map(lp_map, (for_lp) => {return for_lp})
@@ -48,18 +70,47 @@ class GoogleChartsMap {
         return this.reduce_for_location_data(for_location)
       })
     })
-    data.unshift(["location", "color", "cost"])
-    return google.visualization.arrayToDataTable(data)
+    // data.unshift(["location", "color", "cost"])
+    return data
   }
 
   draw() {
     var elem = document.getElementById(this.elem_id)
-    var chart = new google.visualization.GeoChart(elem)
-    var options = {
-      displayMode: 'markers',
-      colorAxis: {colors: ['green', 'blue']}
-    }
-    chart.draw(this.convert_data(), options)
+    // var chart = new google.visualization.GeoChart(elem)
+    // var options = {
+    //   displayMode: 'markers',
+    //   colorAxis: {colors: ['green', 'blue']}
+    // }
+    // chart.draw(this.convert_data(), options)
+    AmCharts.clear();
+
+    var images = _.map(this.convert_data(), (bubble) => {
+      var size =  bubble.points / 1000;
+
+      return {
+        "type": "circle",
+        "theme": "light",
+        "width": size,
+        "height": size,
+        "color": "#a7a737",
+        "longitude": bubble.longitude,
+        "latitude": bubble.latitude,
+        "value": bubble.cost,
+        "label": bubble.lpName
+      };
+    })
+
+    AmCharts.makeChart( this.elem_id, {
+      "type": "map",
+      "projection": "mercator",
+      "dataProvider": {
+        "map": "worldLow",
+        "images": images
+      },
+      "imagesSettings": {
+        "alpha": 0.5
+      }
+    } );
   }
 
   interval() {
