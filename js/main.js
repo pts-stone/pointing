@@ -22,8 +22,8 @@ const shuffle = function(array){
 };
 
 const transform = function(order){
-    const payment = order.value.data.payment;
-    const orderDetails = order.value.data.orderDetails;
+    const payment = order.data.payment;
+    const orderDetails = order.data.orderDetails;
     const city = cities[payment.billingInfo.city.toLowerCase()];
 
     var bubble = {
@@ -40,7 +40,7 @@ const transform = function(order){
     bubble.cost = payment.costs.totalCost;
     bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] == 'Number' ? orderDetails["bonusPoints"] : 0)
     bubble.address = [payment.billingInfo.street1, payment.billingInfo.city, payment.billingInfo.state].join();
-    bubble.lp_name = lpLinksToLpNames[order.value.data.loyaltyProgram];
+    bubble.lp_name = lpLinksToLpNames[order.data.loyaltyProgram];
     return bubble;
 };
 
@@ -52,7 +52,7 @@ var token = PubSub.subscribe(POINTING, subscriber);
 // publish a topic syncronously
 function update() {
     var bubbles = [];
-    var orders = shuffle(data["rows"]);
+    var orders = shuffle(data);
     const size = orders.length;
     const times = getRandomInt(1, size < 20 ? size : 20 );
 
@@ -66,4 +66,4 @@ function update() {
     PubSub.publishSync(POINTING, bubbles);
 };
 
-setInterval(update, 500)
+setInterval(update, 500);
