@@ -3,7 +3,7 @@
 .idea
 
 #datasets
-resources/orders.json
+resources
 
 #bower/node
 node_modules
