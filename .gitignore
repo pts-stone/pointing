@@ -4,3 +4,7 @@
 
 #datasets
 resources/orders.json
+
+#bower/node
+node_modules
+bower_components
