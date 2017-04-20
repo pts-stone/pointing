@@ -64,8 +64,4 @@ function update() {
     PubSub.publishSync(POINTING, bubbles);
 };
 
-
-google.charts.load('current', {'packages': ['geochart']});
-google.charts.setOnLoadCallback(() => setInterval(update, 500));
-
-
+setInterval(update, 500)
