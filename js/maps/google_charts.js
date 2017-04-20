@@ -96,7 +96,7 @@ class GoogleChartsMap {
           result_for_location[lp_name] = {
             latitude: lat,
             longitude: long,
-            lpName: lp_name,
+            lpName: null,
             points: result_for_lp.points + points,
             cost: result_for_lp.cost + cost
           }
@@ -124,7 +124,7 @@ class GoogleChartsMap {
     AmCharts.clear();
 
     var images = _.map(this.convert_data(), (bubble) => {
-      var size =  bubble.points / 1000;
+      var size =  Math.log(bubble.points)*2;
 
       return {
         "type": "circle",
