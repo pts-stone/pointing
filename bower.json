@@ -1,0 +1,27 @@
+{
+  "name": "pointing",
+  "homepage": "https://github.com/pts-stone/pointing",
+  "authors": [
+    "pts-stone"
+  ],
+  "description": "look who is pointing",
+  "main": "index.html",
+  "keywords": [
+    "pointing",
+    "js"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "PubSubJS": "pubsub-js#^1.5.4",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4"
+  }
+}
