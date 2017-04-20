@@ -1,6 +1,5 @@
 class GoogleChartsMap {
   constructor(elem_id) {
-    google.charts.load('current', {'packages': ['geochart']});
     this.elem_id = elem_id
     this.data_map = {}
 
@@ -16,7 +15,7 @@ class GoogleChartsMap {
     this.add({address: "Vancouver", lp_name: "united", points: 100, cost: 100, timestamp: now})
     this.add({address: "Montreal", lp_name: "hilton", points: 100, cost: 100, timestamp: now})
 
-    console.log(this.convert_data())
+    //console.log(this.convert_data())
   }
 
   getColorForLP(lp_name) {
