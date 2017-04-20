@@ -6,7 +6,6 @@ const chart = new GoogleChartsMap("map");
 
 // create a function to subscribe to topics
 const subscriber = function (msg, data) {
-    console.log(data)
     _.forEach(data,function(obj){
       chart.add(obj);
     })
@@ -25,7 +24,7 @@ const shuffle = function(array){
 const transform = function(order){
     const payment = order.value.data.payment;
     const orderDetails = order.value.data.orderDetails;
-    const coordinate = latlong[payment.billingInfo.country.toUpperCase()];
+    const city = cities[payment.billingInfo.city.toLowerCase()];
     var bubble = {
         latitude: 43.650391,
         longitude: -79.383938,
@@ -35,12 +34,12 @@ const transform = function(order){
         cost: 100,
         timestamp: new Date().getTime()
     };
-    bubble.latitude = coordinate.latitude;
-    bubble.longitude = coordinate.longitude;
+    bubble.latitude = city.lat;
+    bubble.longitude = city.lon;
     bubble.cost = payment.costs.totalCost;
     bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] == 'Number' ? orderDetails["bonusPoints"] : 0)
     bubble.address = [payment.billingInfo.street1, payment.billingInfo.city, payment.billingInfo.state].join();
-    bubble.lp_name = orderDetails.loyaltyProgram;
+    bubble.lp_name = order.value.data.loyaltyProgram;
     return bubble;
 };
 
@@ -53,9 +52,8 @@ var token = PubSub.subscribe(POINTING, subscriber);
 function update() {
     var bubbles = [];
     var orders = shuffle(data["rows"]);
-    const size = orders;
-    console.log(size);
-    const times = getRandomInt(1, orders < 20 ? size : 20 );
+    const size = orders.length;
+    const times = getRandomInt(1, size < 20 ? size : 20 );
 
     for(var i = 0; i < times; i++){
         try{
