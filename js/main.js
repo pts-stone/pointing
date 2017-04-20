@@ -7,6 +7,9 @@ const chart = new GoogleChartsMap("map");
 // create a function to subscribe to topics
 const subscriber = function (msg, data) {
     console.log(data)
+    _.forEach(data,function(obj){
+      chart.add(obj);
+    })
 };
 
 //Returns a random integer between min (inclusive) and max (inclusive)
@@ -58,7 +61,7 @@ function update() {
         try{
             bubbles.push(transform(orders[i]));
         } catch(e){
-            console.error('transform', ex.message);
+            console.error('transform', e);
         }
     }
     PubSub.publishSync(POINTING, bubbles);
