@@ -9,6 +9,7 @@ class GoogleChartsMap {
       this.interval()
     };
     this.interval_instance = setInterval(interval, 1000);
+    this.zoomLevel = 1
   }
 
   add({latitude, longitude, address, lp_name, points, cost, timestamp}) {
@@ -143,12 +144,14 @@ class GoogleChartsMap {
       });
     });
 
-    AmCharts.makeChart( this.elem_id, {
+    var map = AmCharts.makeChart( this.elem_id, {
       "type": "map",
       "projection": "mercator",
       "theme": "dark",
       "dataProvider": {
         "map": "worldLow",
+        "zoomLevel": this.zoomLevel,
+        "zoomDuration": 0,
         "images": images
       },
       "imagesSettings": {
@@ -167,8 +170,16 @@ class GoogleChartsMap {
         "marginLeft": 0,
         "marginRight": 0,
         "fontSize": 9
-      }
+      },
     } );
+
+    map.addListener("zoomCompleted", (e) => {
+      // console.log("DERP", map.zoomLevel())
+      this.zoomLevel = map.zoomLevel()
+    })
+    map.addListener("writeDevInto", (e) => {
+      console.log("DERP", e)
+    })
   }
 
   removeOldData() {
