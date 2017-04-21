@@ -1,26 +1,12 @@
-var lpsToColour = {
-  'rapid-rewards': '#a7a737',
-  'mileage-plan': '#0A1652'
-};
-
 class GoogleChartsMap {
   constructor(elem_id) {
-    this.elem_id = elem_id
-    this.data_map = {}
+    this.elem_id = elem_id;
+    this.data_map = {};
 
     var interval = () => {
       this.interval()
-    }
-    this.interval_instance = setInterval(interval, 1000)
-
-    var now = Date.now()
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now})
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+2000})
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+3000})
-    this.add({latitude:54, "longitude":-100, lp_name: "mileage-plan", points: 50000, cost: 100, timestamp: now+5000})
-    this.add({latitude:54, "longitude":-100, lp_name: "mileage-plan", points: 50000, cost: 100, timestamp: now+6000})
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+7000})
-    this.add({latitude:42.5, "longitude":1.5, lp_name: "rapid-rewards", points: 10000, cost: 100, timestamp: now+7000})
+    };
+    this.interval_instance = setInterval(interval, 1000);
   }
 
   add({latitude, longitude, address, lp_name, points, cost, timestamp}) {
@@ -109,23 +95,14 @@ class GoogleChartsMap {
         return for_lp
       })
     })
-    // data.unshift(["location", "color", "cost"])
     return data
   }
 
   draw() {
-    var elem = document.getElementById(this.elem_id)
-    // var chart = new google.visualization.GeoChart(elem)
-    // var options = {
-    //   displayMode: 'markers',
-    //   colorAxis: {colors: ['green', 'blue']}
-    // }
-    // chart.draw(this.convert_data(), options)
     AmCharts.clear();
 
     var images = _.map(this.convert_data(), (bubble) => {
-      var size =  Math.log(bubble.points)*1.5;
-
+      var size =  Math.log(bubble.points) * 3;
       return {
         "type": "circle",
         "theme": "light",
@@ -135,25 +112,51 @@ class GoogleChartsMap {
         "longitude": bubble.longitude,
         "latitude": bubble.latitude,
         "value": bubble.cost,
-        "label": bubble.lpName
       };
     })
+
+    let legendData = [];
+    
+    Object.keys(lpsToColour).forEach(function(key) {
+      legendData.push({
+        "title": key,
+        "color": lpsToColour[key]
+      });
+    });
 
     AmCharts.makeChart( this.elem_id, {
       "type": "map",
       "projection": "mercator",
+      "theme": "dark",
       "dataProvider": {
         "map": "worldLow",
+        //"getAreasFromMap": true
+
         "images": images
       },
       "imagesSettings": {
         "alpha": 0.5
+      },
+      "legend": {
+        "backgroundColor": "#fff",
+        "backgroundAlpha": 0.7,
+        "align": "center",
+        "data": legendData,
+        "position": "absolute",
+        "bottom": 0,
+        "verticalGap": 5,
+        "markerType": "bubble",
+        "backgroundColor": "#000",
+        "autoMargins": false,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "fontSize": 9
       }
     } );
   }
 
   removeOldData() {
-    var now = Date.now()
+    var now = Date.now();
     this.data_map = _.pickBy(this.data_map, (for_timestamp, timestamp) => {
       return now - timestamp < 3000
     })
