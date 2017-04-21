@@ -12,7 +12,7 @@ const subscriber = function (msg, data) {
 };
 
 //Returns a random integer between min (inclusive) and max (inclusive)
-const getRandomInt =function getRandomInt(min, max) {
+const getRandomInt =function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -26,7 +26,7 @@ const transform = function(order){
     const orderDetails = order.data.orderDetails;
     const city = cities[payment.billingInfo.city.toLowerCase()];
 
-    var bubble = {
+    let bubble = {
         latitude: 43.650391,
         longitude: -79.383938,
         address: "unknown",
@@ -38,7 +38,7 @@ const transform = function(order){
     bubble.latitude = city.lat;
     bubble.longitude = city.lon;
     bubble.cost = payment.costs.totalCost;
-    bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] == 'Number' ? orderDetails["bonusPoints"] : 0)
+    bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] === 'number' ? orderDetails["bonusPoints"] : 0)
     bubble.address = [payment.billingInfo.street1, payment.billingInfo.city, payment.billingInfo.state].join();
     bubble.lp_name = lpLinksToLpNames[order.data.loyaltyProgram];
     return bubble;
@@ -47,16 +47,16 @@ const transform = function(order){
 // add the function to the list of subscribers for a particular topic
 // we're keeping the returned token, in order to be able to unsubscribe
 // from the topic later on
-var token = PubSub.subscribe(POINTING, subscriber);
+let token = PubSub.subscribe(POINTING, subscriber);
 
 // publish a topic syncronously
 function update() {
-    var bubbles = [];
-    var orders = shuffle(data);
+    let bubbles = [];
+    let orders = shuffle(data);
     const size = orders.length;
     const times = getRandomInt(1, size < 20 ? size : 20 );
 
-    for(var i = 0; i < times; i++){
+    for(let i = 0; i < times; i++){
         try{
             bubbles.push(transform(orders[i]));
         } catch(e){
@@ -64,6 +64,6 @@ function update() {
         }
     }
     PubSub.publishSync(POINTING, bubbles);
-};
+}
 
 setInterval(update, 500);
