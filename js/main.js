@@ -21,10 +21,22 @@ const shuffle = function(array){
     return _.shuffle(array);
 };
 
+function pickRandomProperty(obj) {
+    var result;
+    var count = 0;
+    for (var prop in obj)
+        if (Math.random() < 1/++count)
+           result = prop;
+    return obj[result];
+}
+
 const transform = function(order){
     const payment = order.data.payment;
     const orderDetails = order.data.orderDetails;
-    const city = cities[payment.billingInfo.city.toLowerCase()];
+    var city = cities[payment.billingInfo.city.toLowerCase()];
+    if (!city) {
+      city = pickRandomProperty(cities)
+    }
 
     let bubble = {
         latitude: 43.650391,
