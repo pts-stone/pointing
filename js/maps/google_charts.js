@@ -10,6 +10,8 @@ class GoogleChartsMap {
     };
     this.interval_instance = setInterval(interval, 1000);
     this.zoomLevel = 1
+    this.zoomX = "50%"
+    this.zoomY = "50%"
   }
 
   add({latitude, longitude, address, lp_name, points, cost, timestamp}) {
@@ -118,6 +120,12 @@ class GoogleChartsMap {
   }
 
   draw() {
+    if (this.map) {
+      this.zoomLevel = this.map.zoomLevel()
+      this.zoomX = this.map.zoomX()
+      this.zoomY = this.map.zoomY()
+    }
+
     AmCharts.clear();
 
     var images = _.map(this.convert_data(), (bubble) => {
@@ -144,7 +152,7 @@ class GoogleChartsMap {
       });
     });
 
-    var map = AmCharts.makeChart( this.elem_id, {
+    this.map = AmCharts.makeChart( this.elem_id, {
       "type": "map",
       "projection": "mercator",
       "theme": "dark",
@@ -152,6 +160,8 @@ class GoogleChartsMap {
         "map": "worldLow",
         "zoomLevel": this.zoomLevel,
         "zoomDuration": 0,
+        "zoomX": this.zoomX,
+        "zoomY": this.zoomY,
         "images": images
       },
       "imagesSettings": {
@@ -172,14 +182,6 @@ class GoogleChartsMap {
         "fontSize": 9
       },
     } );
-
-    map.addListener("zoomCompleted", (e) => {
-      // console.log("DERP", map.zoomLevel())
-      this.zoomLevel = map.zoomLevel()
-    })
-    map.addListener("writeDevInto", (e) => {
-      console.log("DERP", e)
-    })
   }
 
   removeOldData() {
