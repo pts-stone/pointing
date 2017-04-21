@@ -33,9 +33,10 @@ function pickRandomProperty(obj) {
 function pickRandomCity(cities) {
   for (var i=0; i<5; i++) {
     var r_i = Math.floor(Math.random()*most_populous.length)
-    var city = cities[most_populous[r_i].toLowerCase()]
+    var city_name = most_populous[r_i].toLowerCase()
+    var city = cities[city_name]
     if (city) {
-      return city
+      return city_name
     }
   }
 }
@@ -43,9 +44,11 @@ function pickRandomCity(cities) {
 const transform = function(order){
     const payment = order.data.payment;
     const orderDetails = order.data.orderDetails;
-    var city = cities[payment.billingInfo.city.toLowerCase()];
+    var city_name = payment.billingInfo.city.toLowerCase()
+    var city = cities[city_name];
     if (!city) {
-      city = pickRandomCity(cities)
+      city_name = pickRandomCity(cities)
+      city = cities[city_name]
     }
 
     let bubble = {
@@ -61,7 +64,7 @@ const transform = function(order){
     bubble.longitude = city.lon;
     bubble.cost = payment.costs.totalCost;
     bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] === 'number' ? orderDetails["bonusPoints"] : 0);
-    bubble.address = [payment.billingInfo.street1, payment.billingInfo.city, payment.billingInfo.state].join();
+    bubble.address = city_name.toUpperCase();
     bubble.lp_name = lpLinksToLpNames[order.data.loyaltyProgram];
     return bubble;
 };

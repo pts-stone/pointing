@@ -34,7 +34,7 @@ class GoogleChartsMap {
 
     var item = document.createElement("li")
     var color = lpsToColour[lp_name]
-    item.innerHTML = "<strong style='color: "+color+"'>" + lp_name + "</strong> " + points +" points"
+    item.innerHTML = "<strong style='color: "+color+"'>" + lp_name + "</strong> " + points +" points in <strong style='color: "+color+"'>"+address+"</strong>"
 
     if (this.ticker.children.length > 1) {
       this.ticker.insertBefore(item, this.ticker.firstChild)
