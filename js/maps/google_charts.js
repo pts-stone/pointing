@@ -112,6 +112,7 @@ class GoogleChartsMap {
         "longitude": bubble.longitude,
         "latitude": bubble.latitude,
         "value": bubble.cost,
+        "balloonText": bubble.points + " @ " + bubble.cost,
       };
     })
 
@@ -130,15 +131,12 @@ class GoogleChartsMap {
       "theme": "dark",
       "dataProvider": {
         "map": "worldLow",
-        //"getAreasFromMap": true
-
         "images": images
       },
       "imagesSettings": {
         "alpha": 0.5
       },
       "legend": {
-        "backgroundColor": "#fff",
         "backgroundAlpha": 0.7,
         "align": "center",
         "data": legendData,
