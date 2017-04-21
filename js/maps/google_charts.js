@@ -1,6 +1,8 @@
 class GoogleChartsMap {
   constructor(elem_id) {
-    this.elem_id = elem_id;
+    this.ticker_id = elem_id+"-ticker"
+
+    this.elem_id = elem_id+"-map";
     this.data_map = {};
 
     var interval = () => {
@@ -23,6 +25,22 @@ class GoogleChartsMap {
       points: points,
       cost: cost
     })
+
+    this.ticker = this.ticker || document.getElementById(this.ticker_id)
+
+    if (this.ticker.children.length >= 10) {
+      this.ticker.removeChild(this.ticker.children[this.ticker.children.length-1])
+    }
+
+    var item = document.createElement("li")
+    var color = lpsToColour[lp_name]
+    item.innerHTML = "<strong style='color: "+color+"'>" + lp_name + "</strong> " + points +" points"
+
+    if (this.ticker.children.length > 1) {
+      this.ticker.insertBefore(item, this.ticker.firstChild)
+    } else {
+      this.ticker.appendChild(item)
+    }
   }
 
   reduce_for_location_data(for_location) {
