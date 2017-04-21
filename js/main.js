@@ -78,4 +78,4 @@ function update() {
     PubSub.publishSync(POINTING, bubbles);
 }
 
-setInterval(update, 500);
+setInterval(update, 1000);
