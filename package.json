@@ -1,0 +1,25 @@
+{
+  "name": "pointing",
+  "version": "1.0.0",
+  "description": "look who is pointing",
+  "main": "static_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pts-stone/pointing.git"
+  },
+  "keywords": [
+    "points"
+  ],
+  "author": "pts-stone",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pts-stone/pointing/issues"
+  },
+  "homepage": "https://github.com/pts-stone/pointing#readme",
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
