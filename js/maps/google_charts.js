@@ -115,20 +115,43 @@ class GoogleChartsMap {
       };
     })
 
+    let legendData = [];
+    
+    Object.keys(lpsToColour).forEach(function(key) {
+      legendData.push({
+        "title": key,
+        "color": lpsToColour[key]
+      });
+    });
+
     AmCharts.makeChart( this.elem_id, {
       "type": "map",
       "projection": "mercator",
       "theme": "dark",
       "dataProvider": {
         "map": "worldLow",
+        //"getAreasFromMap": true
+
         "images": images
       },
       "imagesSettings": {
         "alpha": 0.5
       },
-      // "legend": {
-      //   "useGraphSettings": true
-      // }
+      "legend": {
+        "backgroundColor": "#fff",
+        "backgroundAlpha": 0.7,
+        "align": "center",
+        "data": legendData,
+        "position": "absolute",
+        "bottom": 0,
+        "verticalGap": 5,
+        "markerType": "bubble",
+        "backgroundColor": "#000",
+        "autoMargins": false,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "fontSize": 9
+      }
     } );
   }
 
