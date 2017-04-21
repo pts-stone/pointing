@@ -38,7 +38,7 @@ const transform = function(order){
     bubble.latitude = city.lat;
     bubble.longitude = city.lon;
     bubble.cost = payment.costs.totalCost;
-    bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] === 'number' ? orderDetails["bonusPoints"] : 0)
+    bubble.points = orderDetails.basePoints + (typeof orderDetails["bonusPoints"] === 'number' ? orderDetails["bonusPoints"] : 0);
     bubble.address = [payment.billingInfo.street1, payment.billingInfo.city, payment.billingInfo.state].join();
     bubble.lp_name = lpLinksToLpNames[order.data.loyaltyProgram];
     return bubble;
