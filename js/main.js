@@ -30,12 +30,22 @@ function pickRandomProperty(obj) {
     return obj[result];
 }
 
+function pickRandomCity(cities) {
+  for (var i=0; i<5; i++) {
+    var r_i = Math.floor(Math.random()*most_populous.length)
+    var city = cities[most_populous[r_i].toLowerCase()]
+    if (city) {
+      return city
+    }
+  }
+}
+
 const transform = function(order){
     const payment = order.data.payment;
     const orderDetails = order.data.orderDetails;
     var city = cities[payment.billingInfo.city.toLowerCase()];
     if (!city) {
-      city = pickRandomProperty(cities)
+      city = pickRandomCity(cities)
     }
 
     let bubble = {
