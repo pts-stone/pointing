@@ -10,6 +10,7 @@ http.createServer(function(request, response) {
         , filename = path.join(process.cwd(), uri);
 
     fs.exists(filename, function(exists) {
+        console.log(filename);
         if(!exists) {
             response.writeHead(404, {"Content-Type": "text/plain"});
             response.write("404 Not Found\n");
