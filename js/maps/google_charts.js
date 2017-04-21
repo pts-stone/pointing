@@ -112,7 +112,7 @@ class GoogleChartsMap {
         "longitude": bubble.longitude,
         "latitude": bubble.latitude,
         "value": bubble.cost,
-        "balloonText": bubble.points + " @ " + bubble.cost,
+        "balloonText": bubble.points + " @ $" + bubble.cost,
       };
     })
 
